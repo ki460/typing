@@ -1,0 +1,14 @@
+{
+  "name": "kaede-typing",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "広告なし・課金なしのタッチタイピング練習。ブラウザだけで動く。",
+  "scripts": {
+    "test": "node tools/test-romaji.mjs && node tools/test-core.mjs",
+    "check": "node tools/check-syntax.mjs",
+    "build": "node tools/build-single.js",
+    "serve": "node tools/serve.mjs"
+  },
+  "license": "MIT"
+}
