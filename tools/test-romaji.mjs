@@ -54,6 +54,30 @@ hint('しゃしん', 'syasin');
 hint('ほんや', 'honnya');
 hint('コーヒー', 'ko-hi-');
 
+// --- 促音の難所
+accept('いっしょに', 'isshoni'); accept('いっしょに', 'issyoni'); accept('いっしょに', 'ixtusyoni');
+accept('ざっし', 'zassi'); accept('ざっし', 'zasshi');
+accept('まっちゃ', 'maccha'); accept('まっちゃ', 'matcha'); accept('まっちゃ', 'mattya');
+accept('しゅっちょう', 'shutchou'); accept('しゅっちょう', 'syuttyou'); accept('しゅっちょう', 'syucchou');
+accept('がっつり', 'gattsuri'); accept('がっつり', 'gatturi');
+accept('きっぷ', 'kippu'); accept('っ', 'ltu');
+// --- 撥音の難所(「ん」の単独 n が使えない条件)
+accept('しんにん', 'shinnninn'); accept('しんにん', 'sinnninn'); accept('しんにん', 'shinninn', false);
+accept('たんい', 'tanni'); accept('たんい', 'tannni', false);
+accept('あんない', 'annnai'); accept('あんない', 'annai', false);
+accept('ほんね', 'honnne'); accept('ほんね', 'honne', false);
+accept('ぐんま', 'gunma'); accept('ぐんま', 'gunnma');
+accept('せんえん', 'sennenn'); accept('せんえん', 'sennen');
+// --- 外来音
+accept('ふぁいる', 'fairu'); accept('ふぁいる', 'huxairu');
+accept('ぱーてぃー', 'pa-thi-'); accept('ぱーてぃー', 'pa-texi-');
+accept('ゔぁいおりん', 'vaiorinn'); accept('うぇぶ', 'webu'); accept('うぇぶ', 'whebu');
+accept('じぇっと', 'jetto'); accept('じぇっと', 'zyetto');
+accept('ちぇっく', 'chekku'); accept('ちぇっく', 'tyekku');
+accept('つぁー', 'tsa-'); accept('しぇあ', 'shea'); accept('しぇあ', 'syea');
+accept('ヴィオラ', 'viora'); accept('コーヒーカップ', 'ko-hi-kappu');
+accept('あ、い。', 'a,i.');
+
 // 途中経過の remaining() が正しく縮むか
 const m = new RomajiMatcher('がっこう');
 const seq = [];

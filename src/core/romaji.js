@@ -99,8 +99,13 @@ function segmentsAt(kana, i, depth = 0) {
   if (ch === 'っ' && depth < 4) {
     segs.push({ romaji: BASE['っ'], len: 1 });
     for (const next of segmentsAt(kana, i + 1, depth + 1)) {
-      const doubled = next.romaji.filter((r) => CONSONANT.test(r)).map((r) => r[0] + r);
-      if (doubled.length) segs.push({ romaji: doubled, len: 1 + next.len });
+      const doubled = [];
+      for (const r of next.romaji) {
+        if (CONSONANT.test(r)) doubled.push(r[0] + r);
+        // ヘボン式の慣用: っ + ち行 は "tch"(matcha = まっちゃ)も受理する
+        if (r.startsWith('ch')) doubled.push('t' + r);
+      }
+      if (doubled.length) segs.push({ romaji: [...new Set(doubled)], len: 1 + next.len });
     }
     return segs;
   }
