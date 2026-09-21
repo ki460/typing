@@ -180,6 +180,27 @@ if (gen && storeMod) {
   }
   t('buildCodeLesson', () => checkLesson('code', gen.buildCodeLesson({ count: 6 }), 'en'));
 
+  t('日本語の1行が 12 かなを下回らない', () => {
+    const short = [];
+    for (let i = 0; i < 40; i++) {
+      for (const l of gen.buildAdaptiveLesson({ lang: 'ja', lines: 8 }).lines) {
+        if (l.target.length < 12) short.push(`${l.kind}:${l.target}(${l.target.length})`);
+      }
+    }
+    ok(short.length === 0, `${short.length} 行が 12 かな未満: ${short.slice(0, 5).join(', ')}`);
+  });
+
+  t('英語の1行が 5〜7 語に収まる', () => {
+    const bad = [];
+    for (let i = 0; i < 30; i++) {
+      for (const l of gen.buildAdaptiveLesson({ lang: 'en', lines: 8 }).lines) {
+        const n = l.target.split(' ').filter(Boolean).length;
+        if (n < 5 || n > 7) bad.push(`${l.kind}:${n}語`);
+      }
+    }
+    ok(bad.length === 0, `${bad.length} 行が範囲外: ${bad.slice(0, 5).join(', ')}`);
+  });
+
   t('buildStageLesson が 1..24 全てで成立する', () => {
     for (const lang of ['ja', 'en']) {
       for (let s = 1; s <= 24; s++) {

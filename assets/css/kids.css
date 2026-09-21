@@ -1,0 +1,301 @@
+/* ============================================================
+   kids.css — こどもモードの見た目。
+   .kids-scope の中だけ暖色系のトークンに上書きし、外の画面には影響させない。
+   ダークが既定、data-theme="light" でも読めるように両方で色を定義する。
+   動きは transition / animation だけで表現し、base.css の
+   prefers-reduced-motion と data-motion="off" にそのまま従う。
+   ============================================================ */
+
+.kids-scope {
+  /* 暖色に寄せたテーマ上書き */
+  --accent: #ff8f3f;
+  --accent-soft: #58331a;
+  --gold: #ffd54a;
+  --surface: #232a37;
+  --surface-2: #2b3442;
+  --line: #3a4557;
+  --line-soft: #2e3746;
+
+  --kids-path: #3d4759;          /* すごろくの道 */
+  --kids-star-off: #55617a;
+  --kids-lock: #465164;
+  --kids-combo-1: #ffd54a;
+  --kids-combo-2: #ff9f43;
+  --kids-combo-3: #ff5f6d;
+  --kids-hp-a: #ff5f6d;
+  --kids-hp-b: #ffb03a;
+  --kids-panel: linear-gradient(160deg, rgba(255, 143, 63, .16), rgba(255, 213, 74, .05));
+
+  /* 紙吹雪の色（canvas から読む） */
+  --kids-c1: #ff8f3f;
+  --kids-c2: #ffd54a;
+  --kids-c3: #6bd6a4;
+  --kids-c4: #6ab7ff;
+  --kids-c5: #ff7aa2;
+
+  display: block;
+}
+
+:root[data-theme="light"] .kids-scope {
+  --accent: #ef7423;
+  --accent-soft: #ffe7d4;
+  --gold: #e8a900;
+  --surface: #ffffff;
+  --surface-2: #fff5ec;
+  --line: #e7d8c9;
+  --line-soft: #f2e7dc;
+
+  --kids-path: #e2d2c1;
+  --kids-star-off: #cfd6e0;
+  --kids-lock: #c9d1dc;
+  --kids-panel: linear-gradient(160deg, rgba(239, 116, 35, .12), rgba(255, 213, 74, .08));
+}
+
+/* ------------------------------------------------------------ 共通 */
+
+.kids-page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+}
+
+.kids-scope .btn { min-height: 44px; }
+.kids-scope .btn-sm { min-height: 40px; }
+.kids-scope h1 { font-size: clamp(1.3rem, 6vw, 1.9rem); }
+.kids-h2 { font-size: 1.05rem; margin-bottom: var(--sp-2); }
+
+.kids-scope .card { background-image: var(--kids-panel); }
+
+.kids-scope .is-hidden {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.kids-chip { color: var(--fg); background: var(--surface-2); }
+.kids-chip-face { font-size: .95rem; }
+
+/* ------------------------------------------------------- 上部バー */
+
+.kids-top { display: flex; flex-direction: column; gap: var(--sp-2); }
+.kids-level { font-weight: 800; font-size: 1.05rem; }
+.kids-xp > i { background: linear-gradient(90deg, var(--accent), var(--gold)); }
+.kids-chips { margin-top: var(--sp-1); }
+.kids-book-btn { border-radius: var(--r-pill); font-weight: 700; }
+
+/* ------------------------------------------------- デイリーミッション */
+
+.kids-mission-list { display: flex; flex-direction: column; gap: var(--sp-3); }
+.kids-mission {
+  display: flex; flex-direction: column; gap: 6px;
+  padding: var(--sp-3);
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  background: var(--surface-2);
+}
+.kids-mission.is-done { border-color: var(--accent); }
+.kids-mission-head { align-items: flex-start; gap: var(--sp-2); }
+.kids-mission-name { font-weight: 700; font-size: .92rem; line-height: 1.4; }
+.kids-mission-num { font-size: .8rem; color: var(--fg-dim); white-space: nowrap; }
+.kids-mission-bar > i { background: linear-gradient(90deg, var(--accent), var(--gold)); }
+
+/* --------------------------------------------------------- マップ */
+
+.kids-map { display: flex; flex-direction: column; gap: var(--sp-5); }
+
+.kids-map-row {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 6px;
+}
+.kids-map-row.is-rev { flex-direction: row-reverse; }
+/* 道に見せる点線。ボタンの後ろに敷く */
+.kids-map-row::before {
+  content: "";
+  position: absolute;
+  left: 8%; right: 8%; top: 50%;
+  border-top: 4px dashed var(--kids-path);
+  z-index: 0;
+}
+
+.kids-stage {
+  position: relative;
+  z-index: 1;
+  transform: translateY(var(--dy, 0));
+  width: 68px; height: 68px; min-width: 68px;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 2px;
+  padding: 0;
+  border: 2px solid var(--line);
+  border-radius: 50%;
+  background: var(--surface-2);
+  color: var(--fg);
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--dur) var(--ease), box-shadow var(--dur) var(--ease), border-color var(--dur) var(--ease);
+}
+.kids-stage:hover { border-color: var(--accent); }
+.kids-stage:active { transform: translateY(var(--dy, 0)) scale(.95); }
+
+.kids-stage.is-boss {
+  width: 76px; height: 76px; min-width: 76px;
+  border-color: var(--accent);
+  background: radial-gradient(circle at 50% 30%, var(--accent-soft), var(--surface-2));
+}
+/* ボスには王冠を乗せる */
+.kids-stage.is-boss::before {
+  content: "👑";
+  position: absolute;
+  top: -14px; left: 50%;
+  transform: translateX(-50%);
+  font-size: 1rem;
+}
+
+.kids-stage.is-lock {
+  background: var(--kids-lock);
+  border-color: var(--kids-lock);
+  color: var(--fg-faint);
+  opacity: .8;
+}
+.kids-stage.is-focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 4px var(--accent-soft);
+  animation: kids-bob 1.6s var(--ease) infinite;
+}
+@keyframes kids-bob {
+  0%, 100% { transform: translateY(var(--dy, 0)); }
+  50% { transform: translateY(calc(var(--dy, 0px) - 5px)); }
+}
+
+.kids-stage-face { font-size: 1.35rem; line-height: 1; }
+.kids-stage-no { font-size: .7rem; font-weight: 800; line-height: 1; }
+.kids-stage-stars { font-size: .55rem; line-height: 1; letter-spacing: .04em; color: var(--kids-star-off); }
+.kids-star.is-on { color: var(--gold); }
+
+/* ------------------------------------------------------ プレイ画面 */
+
+.kids-play-top { gap: var(--sp-2); }
+.kids-play-title { font-weight: 800; font-size: .95rem; text-align: center; }
+.kids-time { font-size: 1.1rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+.kids-time.is-hurry { color: var(--err); }
+
+.kids-boss { display: flex; }
+.kids-boss-face { font-size: 2.4rem; line-height: 1; }
+.kids-boss-name { font-weight: 700; font-size: .85rem; }
+.kids-hp { height: 14px; }
+.kids-hp > i { background: linear-gradient(90deg, var(--kids-hp-a), var(--kids-hp-b)); }
+
+.kids-target-card { text-align: center; }
+.kids-reading { min-height: 1.2em; }
+.kids-target {
+  font-family: var(--font-ui);
+  font-size: clamp(1.7rem, 8.5vw, 3rem);
+  font-weight: 700;
+  letter-spacing: .04em;
+  margin-block: var(--sp-2);
+}
+.kids-romaji {
+  font-size: clamp(1.05rem, 4.6vw, 1.5rem);
+  letter-spacing: .1em;
+  min-height: 1.4em;
+}
+
+.kids-combo {
+  display: flex; flex-direction: column; gap: 4px;
+  padding: var(--sp-3);
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  background: var(--surface);
+}
+.kids-combo-label { font-weight: 700; font-size: .85rem; }
+.kids-combo-num { font-weight: 800; font-size: 1.1rem; }
+.kids-combo-bar { height: 12px; }
+.kids-combo-bar > i { background: var(--kids-star-off); }
+.kids-combo[data-level="1"] .kids-combo-bar > i { background: var(--kids-combo-1); }
+.kids-combo[data-level="2"] .kids-combo-bar > i { background: var(--kids-combo-2); }
+.kids-combo[data-level="3"] .kids-combo-bar > i { background: var(--kids-combo-3); }
+.kids-combo[data-level="3"] .kids-combo-num { color: var(--kids-combo-3); }
+
+.kids-finger-hint { text-align: center; font-weight: 700; color: var(--accent); min-height: 1.5em; }
+.kids-kb, .kids-hands { display: block; }
+
+/* ------------------------------------------------------ けっか画面 */
+
+.kids-result { align-items: stretch; text-align: center; }
+.kids-result-title { font-weight: 800; }
+.kids-result-sub { margin-top: -6px; }
+
+.kids-result-stars { display: flex; justify-content: center; gap: var(--sp-3); }
+.kids-big-star {
+  font-size: clamp(2.2rem, 12vw, 3.4rem);
+  line-height: 1;
+  color: var(--kids-star-off);
+  opacity: .45;
+  transform: scale(.6) rotate(-12deg);
+  transition: transform 320ms var(--ease), color 320ms var(--ease), opacity 320ms var(--ease);
+}
+.kids-big-star.is-on { color: var(--gold); opacity: 1; transform: scale(1) rotate(0); }
+
+.kids-kpis { text-align: left; }
+.kids-rewards { display: flex; flex-direction: column; gap: var(--sp-4); }
+.kids-rewards .card { transition: opacity 280ms var(--ease), transform 280ms var(--ease); }
+.kids-levelup-face { font-size: 2rem; display: block; }
+
+.kids-pet-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));
+  gap: var(--sp-2);
+  margin-bottom: var(--sp-3);
+}
+.kids-pet {
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  padding: var(--sp-2);
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  background: var(--surface-2);
+}
+.kids-pet.is-unknown { color: var(--fg-faint); opacity: .7; }
+.kids-pet-face { font-size: 1.7rem; line-height: 1.2; }
+.kids-pet-name { font-size: .68rem; text-align: center; line-height: 1.3; }
+
+.kids-break { border-color: var(--warn); display: flex; flex-direction: column; gap: var(--sp-2); align-items: center; }
+.kids-break-face { font-size: 1.8rem; }
+
+.kids-actions { justify-content: center; gap: var(--sp-3); }
+.kids-actions .btn { flex: 1 1 140px; min-height: 52px; }
+
+/* 紙吹雪。クリックを邪魔しないように前面でも pointer-events は切る */
+.kids-confetti {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 50;
+}
+
+/* ------------------------------------------------------- 小さい画面 */
+
+@media (max-width: 400px) {
+  .kids-stage { width: 60px; height: 60px; min-width: 60px; }
+  .kids-stage.is-boss { width: 68px; height: 68px; min-width: 68px; }
+  .kids-stage-face { font-size: 1.15rem; }
+  .kids-map-row { gap: 4px; }
+  .kids-map { gap: var(--sp-4); }
+  .kids-actions .btn { flex: 1 1 100%; }
+}
+
+/* プレイ中のレベルと XP バー */
+.kids-play-xp {
+  gap: var(--sp-3);
+  margin-bottom: var(--sp-3);
+}
+.kids-play-lv {
+  font-weight: 800;
+  font-size: .9rem;
+  white-space: nowrap;
+}
+.kids-play-xp .bar { height: 10px; }
+.kids-play-xp .bar > i { background: linear-gradient(90deg, var(--accent), var(--gold)); }

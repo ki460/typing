@@ -93,7 +93,8 @@ export const BADGES: {id, name, need(profile)}[]
 ```js
 { v, createdAt, keys:{char:{n,err,ms,best}}, bigrams:{'ab':{n,ms}},
   courses:{}, sessions:[{t, ...rec}], daily:{'YYYY-MM-DD':{ms,keys,sessions}},
-  xp, streak, lastDay, badges:[id], pets:[{e,n,at}], petProgress, totalKeys }
+  xp, streak, lastDay, badges:[id], pets:[{e,n,at}], petProgress, totalKeys,
+  kidsDaily }   // kidsDaily = {date, claimed:[]} 子供モードのデイリーミッション受領状況
 ```
 
 ### `src/core/curriculum.js`
@@ -261,7 +262,7 @@ export class TypingSession {
     lineIndex:number, totalLines:number, line:Line,
     display:string, unitIndex:number,        // display 上のカーソル位置
     typedRomaji:string, remainingRomaji:string,
-    expected:Set<string>, lastWrong:string|null,
+    expected:Set<string>, lastWrong:string|null, displayIsTarget:boolean,
     combo:number, maxCombo:number,
     metrics: Metrics, remainingMs:number|null, running:boolean, finished:boolean
   }
@@ -270,6 +271,10 @@ export class TypingSession {
 
 /** Metrics = { wpm, cpm, kpm, accuracy /*0..1*/, consistency /*0..1*/,
                 elapsedMs, keys, correct, errors, progress /*0..1*/ } */
+
+/** UI が共有するヘルパ。engine.js から export する。 */
+export function formatMs(ms): string                    // "1:23"
+export function gradeOf(metrics): { stars: number, label: string }  // stars は 0〜3
 
 /** キー入力を session に流し込むヘルパ。IME を避けるため keydown で拾う。 */
 export function attachInput(session: TypingSession, opts?: {
@@ -283,6 +288,8 @@ export function attachInput(session: TypingSession, opts?: {
   （`kpm = 確定かな数 / 分`）。英語では `kpm = cpm`。
 - `accuracy = correct / (correct + errors)`。
 - `consistency` = 正解打鍵間隔の変動係数 cv から `Math.max(0, 1 - cv)`。
+  間隔は 2000ms で丸めてから用いる（長考や中断が 1 回入っただけで指標が潰れないようにするため。
+  2000ms は通常の打鍵間隔の約 10 倍なので、外れ値としての影響は十分残る）。
 - `elapsedMs` は **最初の打鍵から**。pause 中は加算しない。
 - 1 打鍵ごとに `recordKeystroke({expected, ok, ms, prev})` を呼ぶ。
   - `expected`: 誤打のときは「本来押すべきだった代表文字」（`expected` 集合から1つ、
@@ -362,6 +369,9 @@ export function modal({ title, body, actions }): Promise<any>   // body は HTML
 - `#/kids` … `mountKids(root, ctx)`
 - `#/stats` … `mountStats(root, ctx)`
 - `#/settings` … shell 内で実装
+
+`#/adult` `#/kids` に直接来たときは、モード未選択でもそのコースを選んだものとして扱う
+（ブックマーク・共有リンクからそのまま練習に入れる）。ハッシュが無い／未知のときだけホームを表示する。
 
 `ctx` の形（各ビューに渡す）:
 ```js

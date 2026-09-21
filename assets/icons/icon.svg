@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="Kaede Typing">
+  <!-- maskable 用に安全領域(中央80%)へ収める -->
+  <rect width="512" height="512" fill="#0f1216"/>
+  <rect x="96" y="96" width="320" height="320" rx="72" fill="#4f9cf9"/>
+  <text x="256" y="368" font-family="ui-monospace, monospace" font-size="240" font-weight="700"
+        text-anchor="middle" fill="#061018">K</text>
+</svg>

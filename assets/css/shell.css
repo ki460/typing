@@ -1,0 +1,183 @@
+/* ============================================================
+   shell.css — ホーム・設定・共通シェルの見た目。
+   .toast / .modal / .btn / .card などの基本形は base.css 側にあるので
+   ここでは不足分だけを足す。色は CSS 変数経由で指定する。
+   ============================================================ */
+
+:root {
+  --on-accent: #061018;
+  /* こどもカードの暖色。ダーク既定、ライトは下で差し替える */
+  --home-kids-1: #33200f;
+  --home-kids-2: #4a2a14;
+  --home-kids-line: #7a4a1f;
+  --home-kids-ink: #ffc46b;
+  --home-adult-1: var(--surface);
+  --home-adult-2: var(--bg-2);
+  --home-lift: -3px;
+}
+
+:root[data-theme="light"] {
+  --home-kids-1: #fff4e3;
+  --home-kids-2: #ffe4c2;
+  --home-kids-line: #f0c48c;
+  --home-kids-ink: #a85d10;
+}
+
+:root[data-motion="off"] { --home-lift: 0px; }
+@media (prefers-reduced-motion: reduce) { :root { --home-lift: 0px; } }
+
+/* --------------------------------------------------------- 共通の頭 */
+.shell-top {
+  display: flex; align-items: center; gap: var(--sp-3);
+  margin-bottom: var(--sp-5);
+}
+.shell-title { font-size: 1.25rem; }
+
+/* ------------------------------------------------------------ ホーム */
+.home { display: flex; flex-direction: column; gap: var(--sp-5); }
+
+.home-hero { text-align: center; padding-top: var(--sp-5); }
+.home-title {
+  font-size: clamp(1.9rem, 7vw, 2.75rem);
+  letter-spacing: .02em;
+}
+.home-lead { margin-top: var(--sp-2); font-size: .95rem; }
+
+.home-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--sp-4);
+}
+@media (max-width: 600px) { .home-grid { grid-template-columns: minmax(0, 1fr); } }
+
+.home-card {
+  display: flex; flex-direction: column; align-items: flex-start; gap: var(--sp-2);
+  text-align: left;
+  min-width: 0;
+  padding: var(--sp-5);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  background: linear-gradient(160deg, var(--home-adult-1), var(--home-adult-2));
+  color: var(--fg);
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--dur) var(--ease), box-shadow var(--dur) var(--ease), border-color var(--dur) var(--ease);
+}
+.home-card:hover { transform: translateY(var(--home-lift)); box-shadow: var(--shadow); border-color: var(--accent); }
+.home-card:active { transform: translateY(0); }
+
+.home-card-title { font-size: 1.35rem; font-weight: 700; }
+.home-card-lead { color: var(--fg-dim); font-size: .95rem; line-height: 1.7; }
+.home-card-points {
+  margin: var(--sp-1) 0 0; padding-left: 1.1em;
+  color: var(--fg-dim); font-size: .85rem; line-height: 1.8;
+}
+.home-card-go {
+  margin-top: auto; padding-top: var(--sp-3);
+  font-weight: 700; font-size: .9rem; color: var(--accent);
+}
+
+.home-card.is-kids {
+  background: linear-gradient(150deg, var(--home-kids-1), var(--home-kids-2));
+  border-color: var(--home-kids-line);
+}
+.home-card.is-kids .home-card-title { color: var(--home-kids-ink); }
+.home-card.is-kids .home-card-lead,
+.home-card.is-kids .home-card-points { color: var(--fg); opacity: .85; }
+.home-card.is-kids .home-card-go { color: var(--home-kids-ink); }
+.home-card.is-kids:hover { border-color: var(--home-kids-ink); }
+
+.home-meta {
+  display: flex; flex-wrap: wrap; justify-content: center; gap: var(--sp-5);
+}
+.home-meta-item { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+.home-meta-item b { font-size: 1.1rem; font-variant-numeric: tabular-nums; }
+.home-meta-item span { font-size: .7rem; color: var(--fg-faint); }
+
+.home-continue { align-self: center; }
+
+.home-links { display: flex; justify-content: center; gap: var(--sp-2); }
+
+/* ------------------------------------------------------------ 設定 */
+.settings-card { display: flex; flex-direction: column; }
+
+.settings-head {
+  font-size: .8rem; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--fg-faint);
+  margin-top: var(--sp-5);
+  padding-bottom: var(--sp-2);
+  border-bottom: 1px solid var(--line-soft);
+}
+.settings-head:first-child { margin-top: 0; }
+.settings-note { margin-top: var(--sp-3); }
+
+.setting-row {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: var(--sp-4);
+  padding: var(--sp-3) 0;
+  border-bottom: 1px solid var(--line-soft);
+}
+.setting-row:last-child { border-bottom: 0; }
+.setting-label { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.setting-ctl { display: flex; align-items: center; gap: var(--sp-2); flex: 0 0 auto; }
+
+@media (max-width: 560px) {
+  .setting-row { flex-direction: column; align-items: stretch; }
+  .setting-ctl { justify-content: flex-start; flex-wrap: wrap; }
+}
+
+.setting-actions { display: flex; flex-wrap: wrap; gap: var(--sp-2); margin-top: var(--sp-4); }
+
+/* 切り替えボタン群 */
+.seg {
+  display: inline-flex; flex-wrap: wrap;
+  border: 1px solid var(--line); border-radius: var(--r);
+  background: var(--surface-2); overflow: hidden;
+}
+.seg > button {
+  padding: 7px 14px; border: 0; background: transparent;
+  color: var(--fg-dim); font-size: .85rem; font-weight: 600;
+  transition: background var(--dur) var(--ease), color var(--dur) var(--ease);
+}
+.seg > button:hover { color: var(--fg); background: var(--line-soft); }
+.seg > button[aria-pressed="true"] { background: var(--accent); color: var(--on-accent); }
+
+/* オン・オフのつまみ */
+.switch {
+  position: relative; flex: 0 0 auto;
+  width: 50px; height: 28px; padding: 0;
+  border: 1px solid var(--line); border-radius: var(--r-pill);
+  background: var(--surface-2);
+  transition: background var(--dur) var(--ease), border-color var(--dur) var(--ease);
+}
+.switch::after {
+  content: ""; position: absolute; top: 3px; left: 3px;
+  width: 20px; height: 20px; border-radius: 50%;
+  background: var(--fg-faint);
+  transition: transform var(--dur) var(--ease), background var(--dur) var(--ease);
+}
+.switch[aria-checked="true"] { background: var(--accent-soft); border-color: var(--accent); }
+.switch[aria-checked="true"]::after { transform: translateX(22px); background: var(--accent); }
+
+/* つまみ付きスライダー */
+.slider { display: flex; align-items: center; gap: var(--sp-3); min-width: 0; }
+.slider input[type="range"] {
+  width: clamp(120px, 40vw, 190px);
+  accent-color: var(--accent);
+  background: transparent;
+}
+.slider-out {
+  min-width: 4.5em; text-align: right;
+  font-variant-numeric: tabular-nums; font-size: .85rem; color: var(--fg-dim);
+}
+
+/* 破壊的な操作のボタン（base.css に無いので追加） */
+.btn-danger { color: var(--err); border-color: var(--err); background: transparent; }
+.btn-danger:hover { background: var(--err); color: var(--on-accent); }
+
+/* ------------------------------------------------- モーダルの中身 */
+.modal-title { margin-bottom: var(--sp-3); }
+.modal-body { color: var(--fg-dim); line-height: 1.8; }
+.modal-actions {
+  display: flex; flex-wrap: wrap; justify-content: flex-end;
+  gap: var(--sp-2); margin-top: var(--sp-5);
+}

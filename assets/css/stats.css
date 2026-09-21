@@ -1,0 +1,180 @@
+/* ============================================================
+   stats.css — 統計画面。base.css のトークンと共通部品を使う。
+   ヒートマップのキーは keyboard.css と衝突しないよう .sheat-* 接頭辞。
+   色はすべて CSS 変数から。ダーク既定・data-theme="light" でも破綻しない。
+   ============================================================ */
+
+:root {
+  /* 着色されたマスの上に載せる文字色（緑/赤/青のどれでも読める濃色） */
+  --sheat-ink: #08101a;
+  --sheat-gap: 3px;
+  --scal-cell: 11px;
+}
+
+/* ------------------------------------------------------ レイアウト */
+.stats-tabs { margin-bottom: var(--sp-4); }
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--sp-4);
+  align-items: start;
+}
+.stats-grid > .is-wide { grid-column: 1 / -1; }
+
+@media (max-width: 760px) {
+  .stats-grid { grid-template-columns: minmax(0, 1fr); }
+  .stats-grid > .is-wide { grid-column: auto; }
+}
+
+.stats-card {
+  display: flex; flex-direction: column; gap: var(--sp-3);
+  min-width: 0;
+}
+.stats-card-head {
+  display: flex; align-items: baseline; justify-content: space-between;
+  gap: var(--sp-2); flex-wrap: wrap;
+}
+.stats-empty { padding: var(--sp-4) 0; text-align: center; }
+.stats-xpbar { margin-top: var(--sp-1); }
+
+/* ------------------------------------------------------ 推移グラフ */
+.schart { display: block; width: 100%; height: auto; overflow: visible; }
+.schart-grid { stroke: var(--line-soft); stroke-width: 1; }
+.schart-tick { fill: var(--fg-faint); font-size: 11px; font-family: var(--font-mono); }
+.schart-tick-acc { fill: var(--ok); opacity: .75; }
+.schart-wpm { fill: none; stroke: var(--accent); stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+.schart-acc { fill: none; stroke: var(--ok); stroke-width: 1.5; opacity: .45; stroke-dasharray: 4 3; }
+.schart-dot { fill: var(--accent); }
+.schart-dot-acc { fill: var(--ok); opacity: .5; }
+
+.stats-legend { gap: var(--sp-4); color: var(--fg-dim); }
+.slg { display: inline-flex; align-items: center; gap: 6px; }
+.slg::before { content: ""; width: 14px; height: 3px; border-radius: 2px; }
+.slg-wpm::before { background: var(--accent); }
+.slg-acc::before { background: var(--ok); opacity: .5; }
+
+/* -------------------------------------------------- ヒートマップ */
+.sheat { display: flex; flex-direction: column; gap: var(--sheat-gap); width: 100%; }
+.sheat-row { display: flex; gap: var(--sheat-gap); width: 100%; min-width: 0; }
+
+.sheat-key {
+  flex: var(--w, 1) 1 0;
+  min-width: 0;
+  height: clamp(22px, 5vw, 34px);
+  display: flex; align-items: center; justify-content: center;
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+  background: var(--surface-2);
+  color: var(--fg-dim);
+  font-family: var(--font-mono);
+  font-size: clamp(9px, 1.9vw, 12px);
+  line-height: 1;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.sheat-key.is-empty { background: var(--line-soft); color: var(--fg-faint); }
+.sheat-key.is-special {
+  background: transparent; border-style: dashed; color: var(--fg-faint);
+  font-size: clamp(7px, 1.5vw, 10px);
+}
+
+/* ------------------------------------------------------ リスト類 */
+.stats-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--sp-2); }
+.stats-list-item {
+  display: flex; align-items: center; gap: var(--sp-3);
+  padding: 6px 8px; border-radius: var(--r-sm); background: var(--surface-2);
+  min-width: 0;
+}
+.stats-list-body { display: flex; flex-direction: column; gap: 0; min-width: 0; }
+.stats-list-body > span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.skey-chip {
+  flex: 0 0 auto;
+  width: 30px; height: 30px;
+  display: grid; place-items: center;
+  border: 2px solid var(--line);
+  border-radius: var(--r-sm);
+  background: var(--surface);
+  font-family: var(--font-mono); font-weight: 700;
+}
+
+.sbg {
+  flex: 0 0 auto; display: inline-flex; align-items: center; gap: 6px;
+  font-family: var(--font-mono);
+}
+.sbg b { font-size: 1.05rem; }
+.sbg i { color: var(--fg-faint); font-style: normal; }
+
+/* -------------------------------------------------- カレンダー */
+.scal { display: flex; gap: var(--sheat-gap); align-items: flex-start; }
+.scal-labels {
+  display: grid;
+  grid-template-rows: repeat(7, var(--scal-cell));
+  gap: var(--sheat-gap);
+  font-size: 8px; color: var(--fg-faint); line-height: var(--scal-cell);
+}
+.scal-grid {
+  display: grid;
+  grid-template-rows: repeat(7, var(--scal-cell));
+  grid-auto-flow: column;
+  grid-auto-columns: var(--scal-cell);
+  gap: var(--sheat-gap);
+}
+.scal-cell {
+  width: var(--scal-cell); height: var(--scal-cell);
+  border-radius: 2px;
+  background: var(--line-soft);
+}
+.scal-cell[data-level="1"] { background: color-mix(in oklab, var(--ok) 28%, var(--line-soft)); }
+.scal-cell[data-level="2"] { background: color-mix(in oklab, var(--ok) 50%, var(--line-soft)); }
+.scal-cell[data-level="3"] { background: color-mix(in oklab, var(--ok) 74%, var(--line-soft)); }
+.scal-cell[data-level="4"] { background: var(--ok); }
+.scal-cell.is-future { background: transparent; border: 1px dashed var(--line-soft); }
+.scal-legend { gap: var(--sp-1); align-items: center; flex-wrap: wrap; }
+
+/* ------------------------------------------------ 解禁の進み具合 */
+.sunlock { display: flex; flex-wrap: wrap; gap: var(--sp-1); }
+.sunlock-chip {
+  width: 26px; height: 26px;
+  display: grid; place-items: center;
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+  background: var(--surface-2);
+  font-family: var(--font-mono); font-weight: 700; font-size: .8rem;
+}
+.sunlock-chip.is-locked {
+  background: transparent; border-style: dashed;
+  color: var(--fg-faint); opacity: .5;
+}
+
+/* ---------------------------------------------------------- バッジ */
+.sbadges {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: var(--sp-2);
+}
+.sbadge {
+  display: flex; align-items: center; gap: var(--sp-2);
+  padding: 8px 10px; min-width: 0;
+  border: 1px solid var(--line); border-radius: var(--r);
+  background: var(--surface-2);
+  color: var(--fg-faint);
+  filter: grayscale(1); opacity: .6;
+}
+.sbadge.is-on {
+  color: var(--fg); filter: none; opacity: 1;
+  border-color: var(--gold);
+  background: color-mix(in oklab, var(--gold) 12%, var(--surface-2));
+}
+.sbadge-e { flex: 0 0 auto; font-size: 1.25rem; line-height: 1; }
+.sbadge-t { display: flex; flex-direction: column; min-width: 0; }
+.sbadge-t b { font-size: .875rem; }
+.sbadge-t span { color: var(--fg-dim); }
+.sbadge-t b, .sbadge-t span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* 360px でも横に溢れないよう、狭い画面は詰める */
+@media (max-width: 420px) {
+  .sbadges { grid-template-columns: minmax(0, 1fr); }
+  .stats-list-item { gap: var(--sp-2); }
+}

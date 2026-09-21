@@ -1,0 +1,436 @@
+/* ============================================================
+   adult.css — 大人モードの擬態スキン。
+   スキンは <div class="adult-root" data-skin="..."> で切り替える。
+   色は base.css のトークンを --ad-* に写し替えて使い、スキンごとに
+   その --ad-* だけを差し替える(個々の部品に色を直書きしない)。
+   .panic-screen は全面を覆う無害な待機画面。
+   ============================================================ */
+
+.adult-root {
+  --ad-bg: var(--bg);
+  --ad-surface: var(--surface);
+  --ad-chrome-bg: var(--bg-2);
+  --ad-rail-bg: var(--bg-2);
+  --ad-head-bg: var(--surface-2);
+  --ad-cell-bg: var(--surface);
+  --ad-fg: var(--fg);
+  --ad-dim: var(--fg-dim);
+  --ad-line: var(--line);
+  --ad-type-font: var(--font-mono);
+  --ad-type-size: clamp(1rem, 3.4vw, 1.45rem);
+
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+@media (min-width: 1024px) {
+  .adult-root { --ad-type-size: 1.85rem; }
+}
+
+.adult-app {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 100dvh;
+  background: var(--ad-bg);
+  color: var(--ad-fg);
+}
+.adult-app[hidden] { display: none; }
+
+/* ------------------------------------------------------------ 外枠 */
+.ad-bar {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: var(--sp-2); flex-wrap: wrap;
+  padding: 5px var(--sp-3);
+  border-bottom: 1px solid var(--ad-line);
+  background: var(--ad-chrome-bg);
+  color: var(--ad-dim);
+  font-size: .8125rem;
+  min-width: 0;
+}
+.ad-barlabel { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ad-barright { display: flex; align-items: center; gap: var(--sp-2); flex-wrap: wrap; }
+
+.ad-skin {
+  background: var(--ad-surface); color: var(--ad-fg);
+  border: 1px solid var(--ad-line); border-radius: var(--r-sm);
+  padding: 4px 8px; font-size: .8125rem;
+}
+
+.ad-frame { display: flex; flex: 1 1 auto; min-width: 0; min-height: 0; }
+
+.ad-rail {
+  flex: 0 0 180px; width: 180px; min-width: 0;
+  border-right: 1px solid var(--ad-line);
+  background: var(--ad-rail-bg);
+  padding: var(--sp-3);
+  overflow: hidden;
+  font-size: .8125rem; color: var(--ad-dim);
+}
+.ad-rail[hidden] { display: none; }
+
+.ad-main { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; }
+
+.ad-chrome {
+  display: flex; align-items: center; gap: var(--sp-2);
+  padding: 3px var(--sp-3);
+  border-bottom: 1px solid var(--ad-line);
+  background: var(--ad-chrome-bg);
+  color: var(--ad-dim);
+  font-size: .8125rem;
+  min-width: 0; overflow: hidden;
+}
+.ad-chrome[hidden] { display: none; }
+
+.ad-stage {
+  flex: 1 1 auto; min-width: 0;
+  padding: var(--sp-4);
+  display: flex; flex-direction: column; gap: var(--sp-4);
+}
+
+@media (max-width: 760px) {
+  .ad-rail { display: none; }
+  .ad-stage { padding: var(--sp-3); gap: var(--sp-3); }
+}
+
+/* --------------------------------------------------- 擬態パーツ(共通) */
+.ad-tree, .ad-list { display: flex; flex-direction: column; gap: 2px; }
+.ad-tree-item, .ad-tab {
+  font-style: normal; padding: 2px 6px; border-radius: var(--r-sm);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.ad-tree-item.is-on { background: var(--ad-head-bg); color: var(--ad-fg); }
+
+.ad-tabs { display: flex; gap: 2px; min-width: 0; overflow: hidden; }
+.ad-tab { border: 1px solid transparent; font-size: .8125rem; }
+.ad-tab.is-on {
+  background: var(--ad-bg); color: var(--ad-fg);
+  border-color: var(--ad-line); border-bottom-color: transparent;
+}
+
+.ad-toolbar { display: flex; gap: var(--sp-3); }
+.ad-tool { font-style: normal; width: 1.5em; text-align: center; }
+
+.ad-fx { font-style: italic; font-family: var(--font-mono); }
+.ad-ref {
+  font-style: normal; font-family: var(--font-mono);
+  border: 1px solid var(--ad-line); border-radius: var(--r-sm); padding: 0 6px;
+}
+
+.ad-mailhead { display: flex; flex-direction: column; min-width: 0; padding: 2px 0; }
+.ad-mailhead b { color: var(--ad-fg); font-size: .875rem; }
+.ad-termtitle { font-style: normal; font-family: var(--font-mono); }
+
+.ad-list-item {
+  display: flex; flex-direction: column; gap: 1px;
+  padding: 6px; border-radius: var(--r-sm);
+  border-bottom: 1px solid var(--ad-line);
+}
+.ad-list-item b { color: var(--ad-fg); font-weight: 600; font-size: .8125rem; }
+.ad-list-item span { font-size: .6875rem; }
+.ad-list-item.is-on { background: var(--ad-head-bg); }
+
+.ad-fakeline {
+  font-family: var(--ad-type-font);
+  font-size: calc(var(--ad-type-size) * .62);
+  color: var(--fg-faint);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+
+/* ------------------------------------------------------ 出題まわり */
+.ad-doc { min-width: 0; }
+
+.ad-lead {
+  font-size: calc(var(--ad-type-size) * .78);
+  color: var(--ad-dim);
+  margin-bottom: var(--sp-2);
+  word-break: break-word;
+}
+.ad-lead[hidden] { display: none; }
+
+.ad-line {
+  font-family: var(--ad-type-font);
+  font-size: var(--ad-type-size);
+  line-height: 1.9;
+  letter-spacing: .02em;
+  word-break: break-word;
+  min-width: 0;
+}
+.ad-seg { white-space: pre-wrap; }
+
+.ad-romaji { margin-top: var(--sp-2); min-height: 1.4em; }
+.ad-romaji[hidden] { display: none; }
+
+.ad-metrics {
+  display: flex; gap: var(--sp-4); flex-wrap: wrap;
+  font-size: .75rem; color: var(--ad-dim);
+  font-variant-numeric: tabular-nums;
+}
+.ad-metric { display: inline-flex; align-items: baseline; gap: 6px; }
+.ad-metric b { color: var(--ad-fg); font-size: 1.05rem; font-weight: 700; }
+
+.ad-prog { max-width: 520px; }
+.ad-hint { min-height: 1.2em; }
+.ad-kb { margin-top: auto; min-width: 0; }
+
+/* ------------------------------------------------------ 表計算グリッド */
+.ad-grid {
+  display: grid;
+  grid-template-columns: 30px repeat(var(--cols, 6), minmax(0, 1fr));
+  border-top: 1px solid var(--ad-line);
+  border-left: 1px solid var(--ad-line);
+  background: var(--ad-cell-bg);
+  font-size: calc(var(--ad-type-size) * .74);
+  line-height: 1.6;
+  min-width: 0;
+}
+.ad-srow { display: contents; }
+.ad-rn, .ad-col {
+  display: flex; align-items: center; justify-content: center;
+  border-right: 1px solid var(--ad-line);
+  border-bottom: 1px solid var(--ad-line);
+  background: var(--ad-head-bg); color: var(--ad-dim);
+  font-style: normal; font-size: .6875rem; font-family: var(--font-ui);
+  padding: 2px;
+}
+.ad-cell {
+  border-right: 1px solid var(--ad-line);
+  border-bottom: 1px solid var(--ad-line);
+  padding: 4px 6px; min-height: 2.1em; min-width: 0;
+  overflow: hidden; white-space: pre-wrap; word-break: break-all;
+  font-family: var(--ad-type-font);
+}
+.ad-cell.is-sel { outline: 2px solid var(--accent); outline-offset: -2px; }
+/* セル内は狭いので、.typeline の white-space: pre を解いて折り返せるようにする */
+.ad-grid .ch { white-space: pre-wrap; }
+.ad-sheetlead { font-size: .875rem; }
+
+/* ---------------------------------------------------------- editor */
+.ad-editor { display: flex; gap: var(--sp-3); min-width: 0; }
+.ad-gutter {
+  flex: 0 0 auto; display: flex; flex-direction: column;
+  text-align: right; user-select: none;
+  font-family: var(--font-mono);
+  font-size: calc(var(--ad-type-size) * .62);
+  line-height: 1.9; color: var(--fg-faint);
+}
+.ad-gutter i { font-style: normal; }
+.ad-code { flex: 1 1 auto; min-width: 0; }
+
+.adult-root[data-skin="editor"] { --ad-bg: var(--bg); --ad-chrome-bg: var(--bg-2); }
+
+/* ------------------------------------------------------------ docs */
+.adult-root[data-skin="docs"] {
+  --ad-bg: var(--surface-2);
+  --ad-chrome-bg: var(--bg-2);
+  --ad-type-font: var(--font-ui);
+}
+.ad-paper {
+  /* 文書アプリらしく、テーマに関わらず紙は白のままにする */
+  --paper: #fcfcfa;
+  --paper-fg: #23262a;
+  --fg: #23262a;
+  --type-pending: #9aa3ab;
+  --type-done: #2f6f3f;
+  --type-cursor: #2b6cb0;
+  --type-error: #b42318;
+  --type-cursor-bg: rgba(43, 108, 176, .16);
+  background: var(--paper); color: var(--paper-fg);
+  border: 1px solid var(--ad-line);
+  box-shadow: var(--shadow-sm);
+  width: 100%; max-width: 760px; margin-inline: auto;
+  padding: clamp(var(--sp-4), 5vw, 44px);
+}
+.ad-paper .ad-lead { color: #6b7280; }
+.ad-paper .romaji-hint { color: #8a919a; }
+.ad-paper-blank { min-height: min(70dvh, 620px); }
+
+/* ------------------------------------------------------------ mail */
+.adult-root[data-skin="mail"] { --ad-bg: var(--bg); --ad-rail-bg: var(--bg-2); }
+.ad-mailbody { min-width: 0; }
+.ad-mailempty {
+  display: grid; place-items: center; min-height: min(60dvh, 480px);
+  color: var(--ad-dim); font-size: .875rem;
+}
+
+/* -------------------------------------------------------- terminal */
+.adult-root[data-skin="terminal"] {
+  --ad-bg: #0b0f12;
+  --ad-surface: #0e1317;
+  --ad-chrome-bg: #10161a;
+  --ad-rail-bg: #10161a;
+  --ad-head-bg: #10161a;
+  --ad-cell-bg: #0b0f12;
+  --ad-fg: #cfd8d2;
+  --ad-dim: #7d8a84;
+  --ad-line: #1d262b;
+  --fg: #e3ebe6;
+  --fg-dim: #7d8a84;
+  --fg-faint: #5d6a64;
+  --type-pending: #6c7a74;
+  --type-done: #7ec48d;
+  --type-cursor: #e3ebe6;
+  --type-error: #e0736a;
+  --type-cursor-bg: rgba(227, 235, 230, .16);
+}
+.ad-term { font-family: var(--font-mono); min-width: 0; }
+.ad-term-row { display: flex; align-items: baseline; gap: .5ch; flex-wrap: wrap; min-width: 0; }
+.ad-prompt { color: var(--type-done); white-space: nowrap; }
+.ad-cmd { color: var(--ad-dim); white-space: nowrap; }
+.ad-term-row .ad-line { flex: 1 1 12ch; min-width: 0; }
+.ad-caret {
+  display: inline-block; width: .6em; height: 1.1em;
+  background: var(--ad-fg); opacity: .7; vertical-align: text-bottom;
+}
+
+/* ----------------------------------------------------------- plain */
+.adult-root[data-skin="plain"] {
+  --ad-bg: var(--bg);
+  --ad-chrome-bg: var(--bg);
+  --ad-type-font: var(--font-mono);
+}
+
+/* ----------------------------------------------------------- 表計算 */
+.adult-root[data-skin="sheet"] {
+  --ad-bg: var(--bg-2);
+  --ad-chrome-bg: var(--surface);
+  --ad-cell-bg: var(--surface);
+  --ad-type-size: clamp(.95rem, 2.8vw, 1.2rem);
+}
+@media (min-width: 1024px) {
+  .adult-root[data-skin="sheet"] { --ad-type-size: 1.35rem; }
+}
+
+/* -------------------------------------------------------- メニュー */
+.ad-adapt { display: flex; flex-direction: column; gap: var(--sp-3); align-items: flex-start; }
+.ad-adapt .bar { width: 100%; }
+
+.ad-menu {
+  display: grid; gap: var(--sp-3);
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+.ad-menu-item {
+  display: flex; flex-direction: column; align-items: flex-start; gap: 2px;
+  text-align: left; padding: var(--sp-4); height: 100%;
+}
+.ad-menu-item b { font-size: 1rem; }
+.ad-menu-item span { font-weight: 400; line-height: 1.4; }
+
+.ad-result { display: flex; flex-direction: column; gap: var(--sp-3); }
+.ad-actions { margin-top: var(--sp-2); }
+
+/* ---------------------------------------------------- パニック画面 */
+.panic-screen {
+  position: fixed; inset: 0; z-index: 100;
+  background: var(--ad-bg, var(--bg));
+  color: var(--ad-fg, var(--fg));
+  overflow: hidden;
+  padding: var(--sp-4);
+}
+.panic-screen[hidden] { display: none; }
+.panic-inner { width: 100%; height: 100%; max-width: 1100px; margin-inline: auto; overflow: hidden; }
+.panic-inner .ad-editor, .panic-inner .ad-term { height: 100%; }
+.panic-inner .ad-grid { font-size: .875rem; }
+
+/* 復帰直後の「つづける」。押すまでセッションは止めたまま */
+.ad-resume {
+  position: fixed; inset: 0; z-index: 90;
+  display: grid; place-items: center;
+  background: rgba(3, 6, 10, .55);
+  padding: var(--sp-4);
+}
+.ad-resume-card {
+  display: flex; flex-direction: column; gap: var(--sp-3);
+  align-items: center; text-align: center;
+  width: min(320px, 100%);
+}
+
+@media (max-width: 400px) {
+  .ad-bar { font-size: .75rem; }
+  .ad-menu { grid-template-columns: 1fr; }
+  .ad-metrics { gap: var(--sp-3); }
+}
+
+/* ============================================================
+   ひかえめ表示 (data-discreet="on")
+   画面キーボード・手の図・指ヒントを消し、計測値を下端の細い
+   ステータスバーに寄せる。ひと目で「タイピング練習」と分からない
+   状態を既定にするための表示モード。
+   ============================================================ */
+.ad-eye { margin-left: auto; flex: 0 0 auto; opacity: .55; font-size: .75rem; }
+.ad-eye:hover { opacity: 1; }
+
+.adult-root[data-discreet="on"] .ad-kb,
+.adult-root[data-discreet="on"] .ad-hint { display: none; }
+
+.adult-root[data-discreet="on"] .ad-prog {
+  height: 2px;
+  opacity: .3;
+  margin-block: var(--sp-2);
+}
+
+.adult-root[data-discreet="on"] .ad-metrics {
+  position: fixed;
+  inset-inline: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--sp-4);
+  margin: 0;
+  padding: 3px 14px;
+  background: var(--ad-chrome-bg, var(--surface));
+  border-top: 1px solid var(--ad-line, var(--line-soft));
+  color: var(--ad-dim, var(--fg-faint));
+  font-size: .6875rem;
+  line-height: 1.6;
+  z-index: 5;
+}
+.adult-root[data-discreet="on"] .ad-metrics b {
+  font-size: .6875rem;
+  font-weight: 600;
+}
+
+/* ローマ字ヒントは残す（これが無いと練習にならない）が、主張を抑える */
+.adult-root[data-discreet="on"] .ad-romaji { opacity: .6; }
+
+/* 下端のステータスバーに隠れないよう余白を足す */
+.adult-root[data-discreet="on"] .ad-stage { padding-bottom: var(--sp-6); }
+
+/* ひかえめ表示では「打った文字＝本文の色／未入力＝薄い色」にする。
+   緑や青で光らせないのが、画面を覗かれたときに最も効く。 */
+.adult-root[data-discreet="on"] {
+  --type-done: var(--ad-fg);
+  --type-pending: var(--ad-dim);
+  --type-cursor: var(--ad-dim);
+  --type-cursor-bg: color-mix(in srgb, var(--ad-fg) 14%, transparent);
+  --type-error: #b4544f;
+}
+/* color-mix 非対応ブラウザ向けの素直な代替 */
+@supports not (color: color-mix(in srgb, red 50%, transparent)) {
+  .adult-root[data-discreet="on"] { --type-cursor-bg: rgba(128, 128, 128, .18); }
+}
+.adult-root[data-discreet="on"] .ad-barlabel,
+.adult-root[data-discreet="on"] .ad-bar .btn { opacity: .5; }
+.adult-root[data-discreet="on"] .ad-bar:hover .ad-barlabel,
+.adult-root[data-discreet="on"] .ad-bar:hover .btn { opacity: 1; }
+
+/* 紙面・端末スキンは入れ子側で配色を持つので、ひかえめ表示でも上書きする */
+.adult-root[data-discreet="on"] .ad-paper {
+  --type-done: var(--paper-fg);
+  --type-pending: #a8b0b8;
+  --type-cursor: #6b7280;
+  --type-cursor-bg: rgba(20, 25, 30, .08);
+  --type-error: #b4544f;
+}
+.adult-root[data-discreet="on"] .ad-term {
+  --type-done: var(--fg);
+  --type-pending: #6c7a74;
+  --type-cursor: var(--fg-dim);
+  --type-cursor-bg: rgba(227, 235, 230, .10);
+  --type-error: #c07a72;
+}
+/* 進捗バーは「◯/◯」がバーに出ているので、ひかえめ表示では消す */
+.adult-root[data-discreet="on"] .ad-prog { display: none; }

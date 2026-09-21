@@ -34,6 +34,7 @@ function emptyProfile() {
     pets: [],
     petProgress: 0,
     totalKeys: 0,
+    kidsDaily: null, // 子供モードのデイリーミッション受領状況 {date, claimed:[]}
   };
 }
 
@@ -175,6 +176,9 @@ export function worstBigrams(n = 8, minSamples = 6) {
 
 // ------------------------------------------------------- セッション記録 / XP
 
+/** 速度バッジの条件: 一定以上の打鍵数と時間を伴った WPM であること */
+const sustained = (wpm) => (s) => s.wpm >= wpm && s.keys >= 120 && s.durationMs >= 20000;
+
 const BADGES = [
   { id: 'first', name: 'はじめの一歩', need: (p) => p.sessions.length >= 1 },
   { id: 'keys1k', name: '1,000打', need: (p) => p.totalKeys >= 1000 },
@@ -182,9 +186,10 @@ const BADGES = [
   { id: 'keys50k', name: '50,000打', need: (p) => p.totalKeys >= 50000 },
   { id: 'acc98', name: '正確さの達人', need: (p) => p.sessions.some((s) => s.acc >= 0.98 && s.keys >= 120) },
   { id: 'acc100', name: 'ノーミス', need: (p) => p.sessions.some((s) => s.acc === 1 && s.keys >= 80) },
-  { id: 'wpm30', name: '30 WPM', need: (p) => p.sessions.some((s) => s.wpm >= 30) },
-  { id: 'wpm50', name: '50 WPM', need: (p) => p.sessions.some((s) => s.wpm >= 50) },
-  { id: 'wpm70', name: '70 WPM', need: (p) => p.sessions.some((s) => s.wpm >= 70) },
+  // 速度バッジは十分な試行量を伴うときだけ。数打鍵の瞬発で全部取れてしまわないように
+  { id: 'wpm30', name: '30 WPM', need: (p) => p.sessions.some(sustained(30)) },
+  { id: 'wpm50', name: '50 WPM', need: (p) => p.sessions.some(sustained(50)) },
+  { id: 'wpm70', name: '70 WPM', need: (p) => p.sessions.some(sustained(70)) },
   { id: 'streak3', name: '3日れんぞく', need: (p) => p.streak >= 3 },
   { id: 'streak7', name: '1週間れんぞく', need: (p) => p.streak >= 7 },
   { id: 'streak30', name: '1か月れんぞく', need: (p) => p.streak >= 30 },
