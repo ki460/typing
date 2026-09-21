@@ -388,15 +388,15 @@ export function modal({ title, body, actions }): Promise<any>   // body は HTML
 ### 2.7 `src/ui/adult.js` — 大人モード + `assets/css/adult.css`
 
 要件:
-- **職場で目立たない**こと。既定は無音・無アニメ・低彩度。
-- 擬態スキン `skin` を切替可能にする。最低 5 種類:
+- **画面の情報量を絞る**こと。既定は無音・無アニメ・低彩度。
+- 表示スタイル `skin` を切替可能にする。最低 5 種類:
   - `editor` … コードエディタ風（行番号・タブバー・サイドバー）
   - `docs` … 文書エディタ風（白い紙・ツールバー）
   - `sheet` … 表計算風（セルグリッド。1 セル 1 語）
   - `mail` … メールクライアント風（受信トレイ一覧＋本文ペイン）
   - `terminal` … ターミナル風（プロンプト行）
   - `plain` … 最小限
-- **パニックキー**: `Esc` 2回 または `Ctrl+.` で即座に「無害な画面」へ切替。
+- **パニックキー**: `Esc` 2回 または `Ctrl+.` で即座に待機画面（中身のない静止画面）へ切替。
   `document.title` と favicon も差し替える。もう一度同じキーで復帰。
   復帰時は必ずセッションを `pause()` 済みにしておく。
 - `panicOnBlur` が true のとき `window.blur` / `visibilitychange` で自動パニック。

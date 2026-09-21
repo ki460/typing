@@ -1,5 +1,5 @@
 /* ============================================================
-   adult.css — 大人モードの擬態スキン。
+   adult.css — 大人モードの表示スタイル。
    スキンは <div class="adult-root" data-skin="..."> で切り替える。
    色は base.css のトークンを --ad-* に写し替えて使い、スキンごとに
    その --ad-* だけを差し替える(個々の部品に色を直書きしない)。
@@ -96,7 +96,7 @@
   .ad-stage { padding: var(--sp-3); gap: var(--sp-3); }
 }
 
-/* --------------------------------------------------- 擬態パーツ(共通) */
+/* ----------------------------------------- 表示スタイルの部品(共通) */
 .ad-tree, .ad-list { display: flex; flex-direction: column; gap: 2px; }
 .ad-tree-item, .ad-tab {
   font-style: normal; padding: 2px 6px; border-radius: var(--r-sm);

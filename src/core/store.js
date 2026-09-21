@@ -48,7 +48,7 @@ export const DEFAULT_SETTINGS = {
   showHands: true,
   sound: true,
   order: 'balanced',       // 'balanced'(頻度＋運指) | 'homerow'(伝統的)
-  skin: 'editor',          // 大人モードの擬態スキン
+  skin: 'editor',          // 大人モードの表示スタイル
   panicOnBlur: false,      // 画面から離れたら自動で隠す
   spoofTitle: true,
   reduceMotion: false,

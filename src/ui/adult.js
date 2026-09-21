@@ -119,7 +119,7 @@ export function mount(root, ctx) {
   }
   root.dataset.skin = skin();
 
-  // ------------------------------------------------------------ 擬態の枠
+  // ------------------------------------------------------- 表示スタイルの枠
 
   function buildRail(rail) {
     const s = skin();
