@@ -40,7 +40,7 @@ const MENU = [
   { id: 'drill', name: '弱点ドリル', note: '遅い連接だけを集中して打ちます' },
   { id: 'word', name: '単語', note: '短い語をテンポよく' },
   { id: 'text', name: '文章', note: 'まとまった文を通して打ちます' },
-  { id: 'biz', name: 'ビジネス文', note: 'メールの定型文' },
+  { id: 'biz', name: 'ビジネス文', note: 'メールの定型文', langs: ['ja'] },
   { id: 'code', name: 'コード', note: '記号と英数の運指' },
   { id: 'timed', name: '60秒計測', note: '時間を区切って測ります' },
 ];
@@ -287,7 +287,8 @@ export function mount(root, ctx) {
     f.stage.appendChild(card);
 
     const menu = el('div', 'ad-menu');
-    MENU.filter((m) => m.id !== 'adaptive').forEach((m) => {
+    // langs 指定のあるメニューは、その言語のときだけ出す（ビジネス文は日本語教材のみ）
+    MENU.filter((m) => m.id !== 'adaptive' && (!m.langs || m.langs.includes(lang()))).forEach((m) => {
       const b = el('button', 'btn ad-menu-item');
       b.type = 'button';
       b.appendChild(el('b', null, m.name));

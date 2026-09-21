@@ -332,6 +332,22 @@ function mountSettings(root) {
     store.set({ reduceMotion: v }); applyPrefs(); saved(v ? 'アニメーションを止めます' : 'アニメーションを戻しました');
   }, '動きを減らす'), 'アニメーションを止める'));
 
+  card.append(el('h2', 'settings-head', 'おとなモード'));
+  card.append(el('p', 'small muted settings-note',
+    '職場や外出先で短時間の練習を続けやすくするための表示設定です。'));
+  card.append(settingRow('ひかえめ表示', toggle(s.discreet !== false, (v) => {
+    store.set({ discreet: v });
+    saved(v ? 'キーボードと強調色を隠します' : 'キーボードと運指ガイドを表示します');
+  }, 'ひかえめ表示'), '画面キーボード・手の図・強調色を消し、計測値を下端に寄せる'));
+  card.append(settingRow('離れたら隠す', toggle(s.panicOnBlur, (v) => {
+    store.set({ panicOnBlur: v });
+    saved(v ? '別の画面に移ると自動で隠します' : '自動では隠しません');
+  }, '離れたら隠す'), '別のタブ・ウィンドウに移ったら自動で退避する'));
+  card.append(settingRow('タイトルも差し替える', toggle(s.spoofTitle, (v) => {
+    store.set({ spoofTitle: v });
+    saved(v ? 'タブのタイトルとアイコンも差し替えます' : 'タイトルはそのままにします');
+  }, 'タイトルも差し替える'), 'Esc 2回で退避したとき、タブの見出しとアイコンも変える'));
+
   card.append(el('h2', 'settings-head', 'データ'));
   card.append(el('p', 'small muted settings-note', '記録はこのブラウザの中だけに保存されます。外部へ送信しません。'));
 

@@ -410,8 +410,10 @@ export function buildTextLesson({ lang = store.settings.lang, tag = null, count 
     const pool = arr(C.EN_SENTENCES).filter((s) => typeof s === 'string' && s.trim());
     for (const s of shuffle(pool).slice(0, n)) out.push({ display: s, target: s, lang: 'en', kind: 'text' });
   } else {
-    // 文章は短文とビジネス定型句を同じ池として扱い、タグで絞る
-    const pool = [...arr(C.JA_SENTENCES), ...arr(C.BUSINESS_JA)]
+    // タグ指定が無いときは短文だけを使う。
+    // BUSINESS_JA には「たんとうしゃ」のような短い用語が含まれるので、
+    // 「文章」メニューに混ざると 1 行が数かなになってしまう。
+    const pool = (tag ? [...arr(C.JA_SENTENCES), ...arr(C.BUSINESS_JA)] : arr(C.JA_SENTENCES))
       .filter((it) => it && typeof it.k === 'string' && it.k);
     let picked = C.byTag(pool, tag);
     if (!picked.length) picked = pool;

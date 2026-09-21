@@ -175,7 +175,16 @@ if (gen && storeMod) {
       for (let i = 0; i < 5; i++) checkLesson(`adaptive.${lang}`, gen.buildAdaptiveLesson({ lang, lines: 8 }), lang);
     });
     t(`buildWordLesson(${lang})`, () => checkLesson(`word.${lang}`, gen.buildWordLesson({ lang, count: 10 }), lang));
-    t(`buildTextLesson(${lang})`, () => checkLesson(`text.${lang}`, gen.buildTextLesson({ lang, count: 5 }), lang));
+    t(`buildTextLesson(${lang})`, () => {
+      for (let i = 0; i < 10; i++) {
+        const lesson = gen.buildTextLesson({ lang, count: 5 });
+        checkLesson(`text.${lang}`, lesson, lang);
+        // 「文章」は用語や単語ではなく、まとまった長さの文であること
+        const min = lang === 'ja' ? 12 : 25;
+        const tooShort = lesson.lines.filter((l) => l.target.length < min);
+        ok(tooShort.length === 0, `text.${lang}: 短すぎる行 ${tooShort.map((l) => l.target).slice(0, 3).join(' / ')}`);
+      }
+    });
     t(`buildDrillLesson(${lang})`, () => checkLesson(`drill.${lang}`, gen.buildDrillLesson({ lang, count: 8 }), lang));
   }
   t('buildCodeLesson', () => checkLesson('code', gen.buildCodeLesson({ count: 6 }), 'en'));
