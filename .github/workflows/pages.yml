@@ -29,6 +29,10 @@ jobs:
 
       - name: Configure Pages
         uses: actions/configure-pages@v5
+        with:
+          # Pages サイトが未作成でも、このジョブから自動で作成する
+          # (pages: write 権限で REST API を叩く)
+          enablement: true
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
