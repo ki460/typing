@@ -1,7 +1,7 @@
 /**
  * adult.js — 大人モードの練習画面。
  * メニュー → 練習 → 結果 の3画面を1つの root の中で差し替えて表示する。
- * 職場で目立たないことを最優先にし、擬態スキン(editor/docs/sheet/mail/terminal/plain)で
+ * 落ち着いた見た目を最優先にし、表示スタイル(editor/docs/sheet/mail/terminal/plain)で
  * 見た目ごと入れ替える。Esc を素早く2回、または Ctrl+ピリオドで「無害な待機画面」へ退避する。
  * 効果音・アニメーション・祝福演出は既定で無効。
  */
@@ -202,7 +202,7 @@ export function mount(root, ctx) {
     app.append(bar, frameEl);
 
     // ひかえめ表示: 画面キーボード・手の図・指ヒントを隠し、計測値を細い status bar にする。
-    // 職場で開いていても「タイピング練習」だと一目で分からないようにするための既定。
+    // 画面の要素を減らし、打つ文字そのものに集中させるための既定。
     root.dataset.discreet = discreet() ? 'on' : 'off';
     const eye = el('button', 'btn btn-ghost btn-sm ad-eye', discreet() ? '□ ひかえめ' : '■ くわしく');
     eye.type = 'button';

@@ -160,7 +160,7 @@ function mountHome(root) {
   grid.append(homeCard({
     cls: 'is-adult', mode: 'adult', route: '#/adult', title: 'おとなコース',
     lead: '静かに、速く、正確に。仕事で使える指を作ります。',
-    lines: ['適応カリキュラムが弱点だけを出題', 'ビジネス文・コード・速度計測', '既定は無音・低刺激で職場でも目立たない'],
+    lines: ['適応カリキュラムが弱点だけを出題', 'ビジネス文・コード・速度計測', '無音・低彩度。表示スタイルは6種類'],
   }));
   grid.append(homeCard({
     cls: 'is-kids', mode: 'kids', route: '#/kids', title: 'こどもコース',
@@ -334,7 +334,7 @@ function mountSettings(root) {
 
   card.append(el('h2', 'settings-head', 'おとなモード'));
   card.append(el('p', 'small muted settings-note',
-    '職場や外出先で短時間の練習を続けやすくするための表示設定です。'));
+    '画面に出す情報量を減らして、文字そのものに集中しやすくするための設定です。'));
   card.append(settingRow('ひかえめ表示', toggle(s.discreet !== false, (v) => {
     store.set({ discreet: v });
     saved(v ? 'キーボードと強調色を隠します' : 'キーボードと運指ガイドを表示します');
